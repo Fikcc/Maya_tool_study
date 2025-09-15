@@ -118,7 +118,7 @@ class CoreMaya(object):
 
     @classmethod
     def get_target_translate_info(cls, bs, i):
-        # type: (str, int) -> tuple[[str], [tuple[int, int, int, int]]]
+        # type: (str, int) -> tuple[list, list[tuple]]
         """
         通过bs节点与目标体序号获取目标体操作的点与点的位移信息
         :param bs: bs节点
@@ -129,7 +129,7 @@ class CoreMaya(object):
                                 .format(bs, i))  # 获取移动了的点的id
         translate = mc.getAttr('{}.inputTarget[0].inputTargetGroup[{}].inputTargetItem[6000].inputPointsTarget'
                                .format(bs, i))  # 获取每个要移动的点移动的位移，格式为[x, y, z, 1(切线)]
-        return components, translate
+        return components if components else [], translate if translate else [()]
 
     @classmethod
     def set_target_translate_info(cls, bs, index, components, translate):
@@ -276,7 +276,7 @@ class ListWidget(QScrollArea):
 
     def create_widget(self):
         self.main_widget = QWidget(self)
-        self.main_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.main_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setWidget(self.main_widget)
 
     def create_layout(self):
